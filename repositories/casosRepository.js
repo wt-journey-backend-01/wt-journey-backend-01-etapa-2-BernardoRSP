@@ -58,6 +58,23 @@ function adicionar(caso) {
   return caso;
 }
 
+function atualizar(caso, id) {
+  const indice = casos.findIndex((c) => c.id === id);
+  if (indice !== -1) {
+    casos[indice] = caso;
+    return casos[indice];
+  }
+  return null;
+}
+
+function atualizarParcial(caso, id) {
+  const indice = casos.findIndex((c) => c.id === id);
+  if (indice !== -1) {
+    return (casos[indice] = { ...casos[indice], ...caso });
+  }
+  return null;
+}
+
 function deleteById(id) {
   const caso = casos.find((caso) => caso.id === id);
   if (caso) {
@@ -71,5 +88,7 @@ module.exports = {
   findAll,
   findById,
   adicionar,
+  atualizar,
+  atualizarParcial,
   deleteById,
 };

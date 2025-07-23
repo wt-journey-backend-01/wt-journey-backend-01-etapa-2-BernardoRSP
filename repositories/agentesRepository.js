@@ -52,6 +52,23 @@ function adicionar(agente) {
   return agente;
 }
 
+function atualizar(agente, id) {
+  const indice = agentes.findIndex((a) => a.id === id);
+  if (indice !== -1) {
+    agentes[indice] = agente;
+    return agentes[indice];
+  }
+  return null;
+}
+
+function atualizarParcial(agente, id) {
+  const indice = agentes.findIndex((a) => a.id === id);
+  if (indice !== -1) {
+    return (agentes[indice] = { ...agentes[indice], ...agente });
+  }
+  return null;
+}
+
 function deleteById(id) {
   const agente = agentes.find((agente) => agente.id === id);
   if (agente) {
@@ -66,4 +83,6 @@ module.exports = {
   findById,
   adicionar,
   deleteById,
+  atualizar,
+  atualizarParcial,
 };
