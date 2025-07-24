@@ -22,19 +22,19 @@ function adicionarCaso(req, res) {
   const { id, titulo, descricao, status, agente_id } = req.body;
   const erros = {};
   if (!id || !titulo || !descricao || !status || !agente_id) {
-    erros.push("Todos os campos são obrigatórios");
+    erros.geral = "Todos os campos são obrigatórios";
   }
   if (status !== "aberto" && status !== "fechado") {
     erros.status = "O Status deve ser 'aberto' ou 'fechado'";
   }
   if (casosRepository.findById(id)) {
-    erros.push("id: Já existe um caso com esse ID");
+    erros.id = "Já existe um caso com esse ID";
   }
   if (!id.match(/^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$/i)) {
-    erros.push("id: O ID deve ser um UUID válido");
+    erros.id = "O ID deve ser um UUID válido";
   }
   if (!agentesRepository.findById(agente_id)) {
-    erros.push("agente_id: O UUID do agente não foi encontrado");
+    erros.agente_id = "O UUID do agente não foi encontrado";
   }
   // Se houver erros, retorna o status 400 com os erros
   if (erros.length > 0) {

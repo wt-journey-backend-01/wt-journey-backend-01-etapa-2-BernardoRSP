@@ -108,7 +108,7 @@ function deleteAgenteById(req, res) {
   }
   // Se o agente existir, chama o repositório para deletar
   agentesRepository.deleteById(agenteId);
-  res.status(204);
+  res.status(204).send();
 }
 
 module.exports = {
