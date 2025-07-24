@@ -29,7 +29,7 @@ function adicionarAgente(req, res) {
     erros.dataDeIncorporacao = "A data de incorporação deve ser uma data válida no formato AAAA/MM/DD";
   }
   if (agentesRepository.findById(id)) {
-    erros.push("id: Já existe um agente com esse ID");
+    erros.id = "Já existe um agente com esse ID";
   }
   if (!id.match(/^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$/i)) {
     erros.id = "O ID deve ser um UUID válido";
@@ -57,7 +57,7 @@ function atualizarAgente(req, res) {
   }
 
   if (agentesRepository.findById(id) && agentesRepository.findById(id).id !== agenteId) {
-    erros.push("id: Já existe um agente com esse ID");
+    erros.id = "Já existe um agente com esse ID";
   }
   if (id && !id.match(/^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$/i)) {
     erros.id = "O ID deve ser um UUID válido";

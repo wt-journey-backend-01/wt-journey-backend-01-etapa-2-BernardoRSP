@@ -20,12 +20,12 @@ function getCasoById(req, res) {
 
 function adicionarCaso(req, res) {
   const { id, titulo, descricao, status, agente_id } = req.body;
-  const erros = [];
+  const erros = {};
   if (!id || !titulo || !descricao || !status || !agente_id) {
     erros.push("Todos os campos são obrigatórios");
   }
   if (status !== "aberto" && status !== "fechado") {
-    erros.push("status: O Status deve ser 'aberto' ou 'fechado'");
+    erros.status = "O Status deve ser 'aberto' ou 'fechado'";
   }
   if (casosRepository.findById(id)) {
     erros.push("id: Já existe um caso com esse ID");
