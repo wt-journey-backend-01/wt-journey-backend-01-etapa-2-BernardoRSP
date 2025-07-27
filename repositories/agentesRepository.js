@@ -1,40 +1,17 @@
 // Repositório de agentes
+
 const agentes = [
   {
-    id: "60e77701-68b4-4d68-a54c-771890ca665b",
+    id: "a3f9c3b4-0e51-4c3a-9b15-c7f8d3a1e72f",
     nome: "Rommel Carneiro",
     dataDeIncorporacao: "2010/03/12",
     cargo: "delegado",
   },
   {
-    id: "283fc0e7-5494-42a8-919f-e2acd3106e58",
+    id: "d5721b6f-cf0e-4e4d-9a3d-1827fa81a2b9",
     nome: "Bernardo Rezende",
     dataDeIncorporacao: "2015/08/27",
     cargo: "investigador",
-  },
-  {
-    id: "4b2f61ef-bc6d-4d3d-95e5-f40c9fe16847",
-    nome: "Sofia Almeida",
-    dataDeIncorporacao: "2018/11/19",
-    cargo: "escrivã",
-  },
-  {
-    id: "835922bc-011a-4b18-b03a-fd43ca6578f1",
-    nome: "Miguel Torres",
-    dataDeIncorporacao: "2020/06/05",
-    cargo: "agente policial",
-  },
-  {
-    id: "06734489-11bd-4d36-986c-b98296700e47",
-    nome: "Helena Duarte",
-    dataDeIncorporacao: "2012/01/23",
-    cargo: "inspetora",
-  },
-  {
-    id: "5fbeb01c-7890-4069-a337-1c1cd38bc8ea",
-    nome: "Lucas Farias",
-    dataDeIncorporacao: "2016/09/14",
-    cargo: "perito criminal",
   },
 ];
 // ----------------------

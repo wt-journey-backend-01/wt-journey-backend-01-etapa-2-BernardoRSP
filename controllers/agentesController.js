@@ -112,18 +112,18 @@ function deleteAgenteById(req, res) {
 }
 
 function getAgentesFiltrados(req, res) {
-  const { especialidade, ordenarPorData } = req.query;
+  const { cargo, ordenarPorData } = req.query;
   let agentes = agentesRepository.findAll();
 
-  if (especialidade) {
-    const esp = especialidade.toLowerCase();
-    agentes = agentes.filter((agente) => agente.especialidade.toLowerCase().includes(esp));
+  if (cargo) {
+    const esp = cargo.toLowerCase();
+    agentes = agentes.filter((agente) => agente.cargo.toLowerCase().includes(esp));
   }
 
   if (ordenarPorData === "asc" || ordenarPorData === "desc") {
     agentes.sort((a, b) => {
-      const dataA = Date.parse(a.data_incorporacao);
-      const dataB = Date.parse(b.data_incorporacao);
+      const dataA = Date.parse(a.dataDeIncorporacao);
+      const dataB = Date.parse(b.dataDeIncorporacao);
       return ordenarPorData === "asc" ? dataA - dataB : dataB - dataA;
     });
   }
