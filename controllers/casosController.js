@@ -112,27 +112,24 @@ function deleteCasoById(req, res) {
 }
 
 function getCasosFiltrados(req, res) {
-  const { agente_id, status, q } = req.query;
-  let resultados = casosRepository.findAll();
-
-  if (agente_id) {
-    resultados = resultados.filter((caso) => caso.agente_id === agente_id);
-  }
+  let { status, agente_id, q } = req.query;
+  let casos = casosRepository.findAll();
 
   if (status) {
-    resultados = resultados.filter((caso) => caso.status === status);
+    status = status.toLowerCase();
+    casos = casos.filter((caso) => caso.status.toLowerCase() === status);
+  }
+
+  if (agente_id) {
+    casos = casos.filter((caso) => caso.agente_id === agente_id);
   }
 
   if (q) {
-    const termo = q.toLowerCase();
-    resultados = resultados.filter((caso) => caso.titulo.toLowerCase().includes(termo) || caso.descricao.toLowerCase().includes(termo));
+    const keyword = q.toLowerCase();
+    casos = casos.filter((caso) => caso.titulo.toLowerCase().includes(keyword) || caso.descricao.toLowerCase().includes(keyword));
   }
 
-  if (resultados.length === 0) {
-    return res.status(404).json({ status: 404, mensagem: "Nenhum caso encontrado com os filtros fornecidos" });
-  }
-
-  res.status(200).json(resultados);
+  res.json(casos);
 }
 
 function getAgenteDoCaso(req, res) {

@@ -1,46 +1,46 @@
 // Repositório de casos
 const casos = [
   {
-    id: "a7f885e8-ae88-47b8-80b3-9e9a070c986a",
+    id: "95e0dadd-0894-4643-bea1-76069f197474",
     titulo: "homicidio",
     descricao: "Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.",
     status: "aberto",
-    agente_id: "c903383c-9ebf-4fb1-a747-75e5da1d4a30",
+    agente_id: "60e77701-68b4-4d68-a54c-771890ca665b",
   },
   {
-    id: "8aa755dc-562b-4b7b-af8d-0e4644e88635",
+    id: "9fc4e999-662b-4530-bb21-524ca9d2da39",
     titulo: "furto",
     descricao: "Furto de veículo ocorrido às 03:15 do dia 22/03/2015 na Rua das Flores, vítima relatou o desaparecimento do carro.",
     status: "fechado",
-    agente_id: "da9aa39b-1a31-41fe-8a79-3e3dbae4f7e0",
+    agente_id: "283fc0e7-5494-42a8-919f-e2acd3106e58",
   },
   {
-    id: "7dc6bbd5-69c0-47f5-944a-a32d61d5adc2",
+    id: "0cc76570-62d4-446c-b6db-81d97d1b21f1",
     titulo: "assalto",
     descricao: "Assalto à residência às 21:00 do dia 05/11/2018 no bairro Centro, dois suspeitos armados invadiram a casa.",
     status: "aberto",
-    agente_id: "c903383c-9ebf-4fb1-a747-75e5da1d4a30",
+    agente_id: "283fc0e7-5494-42a8-919f-e2acd3106e58",
   },
   {
-    id: "fa0693ab-0519-42ed-8e73-ea51770f0c5e",
+    id: "21492d6b-0632-4236-8710-d8ff2cd7f686",
     titulo: "tráfico de drogas",
     descricao: "Apreensão de entorpecentes às 16:45 do dia 18/02/2020 na Avenida Brasil, três indivíduos detidos.",
     status: "fechado",
-    agente_id: "3906a95d-74aa-4921-b96f-8eb12a2948f8",
+    agente_id: "60e77701-68b4-4d68-a54c-771890ca665b",
   },
   {
-    id: "83afc3f0-2688-4fad-99f8-187ee5bbbded",
+    id: "02df2089-f25c-48d5-b144-7c699ce0d928",
     titulo: "fraude",
     descricao: "Investigação de fraude bancária iniciada em 27/07/2021, valores desviados de contas de clientes.",
     status: "aberto",
-    agente_id: "da9aa39b-1a31-41fe-8a79-3e3dbae4f7e0",
+    agente_id: "835922bc-011a-4b18-b03a-fd43ca6578f1",
   },
   {
-    id: "eb0f5dd3-3ec2-4cf2-a35c-c105de4ebbf6",
+    id: "4af293f9-e9bf-4bd2-91e2-b26a3587acbe",
     titulo: "sequestro",
     descricao: "Sequestro de filho de empresário às 08:30 do dia 03/05/2017, vítima liberada após pagamento de resgate.",
     status: "fechado",
-    agente_id: "6a8ac3a1-4afd-4b5f-9f5d-4375f2b63813",
+    agente_id: "835922bc-011a-4b18-b03a-fd43ca6578f1",
   },
 ];
 // ----------------------

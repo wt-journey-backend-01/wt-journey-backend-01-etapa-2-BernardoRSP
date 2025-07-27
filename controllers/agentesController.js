@@ -112,24 +112,23 @@ function deleteAgenteById(req, res) {
 }
 
 function getAgentesFiltrados(req, res) {
-  const { cargo, sort } = req.query;
-  let resultados = agentesRepository.findAll();
+  const { especialidade, ordenarPorData } = req.query;
+  let agentes = agentesRepository.findAll();
 
-  if (cargo) {
-    resultados = resultados.filter((agente) => agente.cargo === cargo);
+  if (especialidade) {
+    const esp = especialidade.toLowerCase();
+    agentes = agentes.filter((agente) => agente.especialidade.toLowerCase().includes(esp));
   }
 
-  if (sort === "dataDeIncorporacao") {
-    resultados.sort((a, b) => new Date(a.dataDeIncorporacao) - new Date(b.dataDeIncorporacao));
-  } else if (sort === "-dataDeIncorporacao") {
-    resultados.sort((a, b) => new Date(b.dataDeIncorporacao) - new Date(a.dataDeIncorporacao));
+  if (ordenarPorData === "asc" || ordenarPorData === "desc") {
+    agentes.sort((a, b) => {
+      const dataA = Date.parse(a.data_incorporacao);
+      const dataB = Date.parse(b.data_incorporacao);
+      return ordenarPorData === "asc" ? dataA - dataB : dataB - dataA;
+    });
   }
 
-  if (resultados.length === 0) {
-    return res.status(404).json({ status: 404, mensagem: "Nenhum agente encontrado com os filtros fornecidos" });
-  }
-
-  res.status(200).json(resultados);
+  res.json(agentes);
 }
 
 module.exports = {
