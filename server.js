@@ -9,6 +9,12 @@ app.use(express.json());
 app.use("/casos", casosRoutes);
 app.use("/agentes", agentesRoutes);
 
+const setupSwagger = require("./docs/swagger.js");
+setupSwagger(app);
+
+const errorHandler = require("./utils/errorHandler");
+app.use(errorHandler);
+
 // Inicia o servidor
 app.listen(port, () => {
   console.log(`\nServidor do departamento de polícia rodando em http://localhost:${port}`);

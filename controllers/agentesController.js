@@ -31,7 +31,7 @@ function adicionarAgente(req, res) {
   if (agentesRepository.findById(id)) {
     erros.id = "Já existe um agente com esse ID";
   }
-  if (!id.match(/^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$/i)) {
+  if (!id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)) {
     erros.id = "O ID deve ser um UUID válido";
   }
   // Se houver erros, retorna o status 400 com os erros
@@ -59,7 +59,7 @@ function atualizarAgente(req, res) {
   if (agentesRepository.findById(id) && agentesRepository.findById(id).id !== agenteId) {
     erros.id = "Já existe um agente com esse ID";
   }
-  if (id && !id.match(/^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$/i)) {
+  if (id && !id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)) {
     erros.id = "O ID deve ser um UUID válido";
   }
   // Se houver erros, retorna o status 400 com os erros
@@ -83,7 +83,7 @@ function atualizarAgenteParcial(req, res) {
   if (novosDados.id && novosDados.id !== agenteId && agentesRepository.findById(novosDados.id)) {
     erros.id = " Já existe um agente com esse ID";
   }
-  if (novosDados.id && !novosDados.id.match(/^[0-9a-z]{8}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{4}-[0-9a-z]{12}$/i)) {
+  if (novosDados.id && !novosDados.id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)) {
     erros.id = "O ID deve ser um UUID válido";
   }
   if (novosDados.dataDeIncorporacao && !novosDados.dataDeIncorporacao.match(/^(19[7-9][0-9]|20[0-1][0-9]|202[0-5])\/(0[1-9]|1[0-2])\/(0[1-9]|[1-2][0-9]|3[0-1])$/)) {
@@ -111,6 +111,27 @@ function deleteAgenteById(req, res) {
   res.status(204).send();
 }
 
+function getAgentesFiltrados(req, res) {
+  const { cargo, sort } = req.query;
+  let resultados = agentesRepository.findAll();
+
+  if (cargo) {
+    resultados = resultados.filter((agente) => agente.cargo === cargo);
+  }
+
+  if (sort === "dataDeIncorporacao") {
+    resultados.sort((a, b) => new Date(a.dataDeIncorporacao) - new Date(b.dataDeIncorporacao));
+  } else if (sort === "-dataDeIncorporacao") {
+    resultados.sort((a, b) => new Date(b.dataDeIncorporacao) - new Date(a.dataDeIncorporacao));
+  }
+
+  if (resultados.length === 0) {
+    return res.status(404).json({ status: 404, mensagem: "Nenhum agente encontrado com os filtros fornecidos" });
+  }
+
+  res.status(200).json(resultados);
+}
+
 module.exports = {
   getAllAgentes,
   getAgenteById,
@@ -118,4 +139,5 @@ module.exports = {
   deleteAgenteById,
   atualizarAgente,
   atualizarAgenteParcial,
+  getAgentesFiltrados,
 };
