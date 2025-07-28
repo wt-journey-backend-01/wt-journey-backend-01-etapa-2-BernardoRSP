@@ -1,20 +1,22 @@
-// Repositório de agentes
+// CORREÇÃO: Adicionando o require('uuid') para gerar IDs dinamicamente.
+const { v4: uuidv4 } = require("uuid");
 
 const agentes = [
   {
-    id: "a3f9c3b4-0e51-4c3a-9b15-c7f8d3a1e72f",
+    // CORREÇÃO: ID agora é gerado dinamicamente na inicialização.
+    id: uuidv4(),
     nome: "Rommel Carneiro",
     dataDeIncorporacao: "2010/03/12",
     cargo: "delegado",
   },
   {
-    id: "d5721b6f-cf0e-4e4d-9a3d-1827fa81a2b9",
+    // CORREÇÃO: ID agora é gerado dinamicamente na inicialização.
+    id: uuidv4(),
     nome: "Bernardo Rezende",
     dataDeIncorporacao: "2015/08/27",
     cargo: "investigador",
   },
 ];
-// ----------------------
 
 function findAll() {
   return agentes;
@@ -41,20 +43,21 @@ function atualizar(agente, id) {
 function atualizarParcial(agente, id) {
   const indice = agentes.findIndex((a) => a.id === id);
   if (indice !== -1) {
-    return (agentes[indice] = { ...agentes[indice], ...agente });
+    agentes[indice] = { ...agentes[indice], ...agente };
+    return agentes[indice];
   }
   return null;
 }
 
 function deleteById(id) {
-  const agente = agentes.find((agente) => agente.id === id);
-  if (agente) {
-    return agentes.splice(agentes.indexOf(agente), 1);
+  const indice = agentes.findIndex((a) => a.id === id);
+  if (indice !== -1) {
+    agentes.splice(indice, 1);
+    return true;
   }
   return false;
 }
 
-// Exporta as funções do repositório
 module.exports = {
   findAll,
   findById,
@@ -62,4 +65,5 @@ module.exports = {
   deleteById,
   atualizar,
   atualizarParcial,
+  agentes,
 };

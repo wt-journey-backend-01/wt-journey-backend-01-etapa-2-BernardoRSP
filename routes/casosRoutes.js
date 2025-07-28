@@ -41,7 +41,6 @@ router.get("/", casosController.getAllCasos);
  *         description: Caso não encontrado
  */
 router.get("/:id", casosController.getCasoById);
-
 /**
  * @swagger
  * /casos:
@@ -179,6 +178,6 @@ router.get("/search", casosController.getCasosFiltrados);
  *       404:
  *         description: Caso ou agente não encontrado
  */
-router.get("/:caso_id/agente", casosController.getAgenteDoCaso);
+router.get("/:id/agente", casosController.getAgenteDoCaso);
 
 module.exports = router;

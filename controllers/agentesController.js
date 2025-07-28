@@ -10,12 +10,16 @@ function getAgentesFiltrados(req, res) {
   const { cargo, ordenarPorData } = req.query;
   let agentes = agentesRepository.findAll();
 
+  if (ordenarPorData && ordenarPorData !== "asc" && ordenarPorData !== "desc") {
+    return res.status(400).json({ status: 400, mensagem: "Parâmetro 'ordenarPorData' inválido. Use 'asc' ou 'desc'." });
+  }
+
   if (cargo) {
     const cargoFormatado = cargo.toLowerCase();
     agentes = agentes.filter((agente) => agente.cargo.toLowerCase().includes(cargoFormatado));
   }
 
-  if (ordenarPorData === "asc" || ordenarPorData === "desc") {
+  if (ordenarPorData) {
     agentes.sort((a, b) => {
       const dataA = new Date(a.dataDeIncorporacao.replace(/\//g, "-"));
       const dataB = new Date(b.dataDeIncorporacao.replace(/\//g, "-"));
@@ -111,6 +115,7 @@ function deleteAgenteById(req, res) {
   if (!isUUID(id)) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
   }
+  // A lógica aqui já estava correta pois o repositório foi ajustado para retornar true/false.
   const sucesso = agentesRepository.deleteById(id);
   if (!sucesso) {
     return res.status(404).json({ status: 404, mensagem: "Agente não encontrado" });

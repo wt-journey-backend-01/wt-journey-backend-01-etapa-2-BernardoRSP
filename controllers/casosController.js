@@ -11,8 +11,11 @@ function getCasosFiltrados(req, res) {
   let { status, agente_id, q, ordenarPor } = req.query;
   let casos = casosRepository.findAll();
 
+  if (status && status !== "aberto" && status !== "fechado") {
+    return res.status(400).json({ status: 400, mensagem: "Parâmetro 'status' inválido. Use 'aberto' ou 'fechado'." });
+  }
+
   if (status) {
-    status = status.toLowerCase();
     casos = casos.filter((caso) => caso.status.toLowerCase() === status);
   }
 
@@ -36,6 +39,23 @@ function getCasosFiltrados(req, res) {
   }
 
   res.status(200).json(casos);
+}
+
+function getAgenteDoCaso(req, res) {
+  const { id } = req.params;
+
+  if (!isUUID(id)) {
+    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID do caso deve ser um UUID válido" } });
+  }
+  const caso = casosRepository.findById(id);
+  if (!caso) {
+    return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
+  }
+  const agente = agentesRepository.findById(caso.agente_id);
+  if (!agente) {
+    return res.status(404).json({ status: 404, mensagem: "Agente associado ao caso não encontrado" });
+  }
+  res.status(200).json(agente);
 }
 
 function getCasoById(req, res) {
@@ -146,25 +166,9 @@ function deleteCasoById(req, res) {
   res.status(204).send();
 }
 
-function getAgenteDoCaso(req, res) {
-  const { caso_id } = req.params;
-  if (!isUUID(caso_id)) {
-    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { caso_id: "O ID do caso deve ser um UUID válido" } });
-  }
-  const caso = casosRepository.findById(caso_id);
-  if (!caso) {
-    return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
-  }
-  const agente = agentesRepository.findById(caso.agente_id);
-  if (!agente) {
-    return res.status(404).json({ status: 404, mensagem: "Agente associado ao caso não encontrado" });
-  }
-  res.status(200).json(agente);
-}
-
 module.exports = {
   getAllCasos,
-  getCasosFiltrados, // Exportando a nova função
+  getCasosFiltrados,
   getCasoById,
   adicionarCaso,
   deleteCasoById,
