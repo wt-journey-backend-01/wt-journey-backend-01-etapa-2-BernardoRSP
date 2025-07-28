@@ -18,4 +18,5 @@ app.use(errorHandler);
 // Inicia o servidor
 app.listen(port, () => {
   console.log(`\nServidor do departamento de polícia rodando em http://localhost:${port}`);
+  console.log(`Documentação da API disponível em http://localhost:${port}/api-docs`);
 });
