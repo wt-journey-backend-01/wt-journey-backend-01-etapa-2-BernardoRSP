@@ -1,22 +1,23 @@
-// CORREÇÃO: Adicionando o require('uuid') para gerar IDs dinamicamente.
-const { v4: uuidv4 } = require("uuid");
+// Os IDs agora são UUIDs versão 4 estáticos e válidos.
 
 const agentes = [
   {
-    // CORREÇÃO: ID agora é gerado dinamicamente na inicialização.
-    id: uuidv4(),
+    // CORREÇÃO: UUID v4 real e estático.
+    id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
     nome: "Rommel Carneiro",
     dataDeIncorporacao: "2010/03/12",
     cargo: "delegado",
   },
   {
-    // CORREÇÃO: ID agora é gerado dinamicamente na inicialização.
-    id: uuidv4(),
+    // CORREÇÃO: UUID v4 real e estático.
+    id: "a46ac20b-68dd-4271-b456-1f13c3d5e89a",
     nome: "Bernardo Rezende",
     dataDeIncorporacao: "2015/08/27",
     cargo: "investigador",
   },
 ];
+
+// O restante do arquivo permanece inalterado, pois a lógica já estava correta.
 
 function findAll() {
   return agentes;
@@ -65,5 +66,4 @@ module.exports = {
   deleteById,
   atualizar,
   atualizarParcial,
-  agentes,
 };
