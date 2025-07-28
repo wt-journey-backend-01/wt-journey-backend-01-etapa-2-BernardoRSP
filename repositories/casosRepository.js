@@ -1,13 +1,4 @@
-const { v4: uuidv4 } = require("uuid");
-const { agentes } = require("./agentesRepository.js");
-
-const casos = [];
-
-function findAll() {
-  return casos;
-}
-
-function findById(id) {// Os IDs agora são UUIDs versão 4 estáticos e válidos.
+// Os IDs agora são UUIDs versão 4 estáticos e válidos.
 
 const casos = [
   {
@@ -37,50 +28,6 @@ function findAll() {
 }
 
 function findById(id) {
-  return casos.find((caso) => caso.id === id);
-}
-
-function adicionar(caso) {
-  casos.push(caso);
-  return caso;
-}
-
-function atualizar(caso, id) {
-  const indice = casos.findIndex((c) => c.id === id);
-  if (indice !== -1) {
-    casos[indice] = caso;
-    return casos[indice];
-  }
-  return null;
-}
-
-function atualizarParcial(caso, id) {
-  const indice = casos.findIndex((c) => c.id === id);
-  if (indice !== -1) {
-    casos[indice] = { ...casos[indice], ...caso };
-    return casos[indice];
-  }
-  return null;
-}
-
-function deleteById(id) {
-  const indice = casos.findIndex((c) => c.id === id);
-  if (indice !== -1) {
-    casos.splice(indice, 1);
-    return true;
-  }
-  return false;
-}
-
-module.exports = {
-  findAll,
-  findById,
-  adicionar,
-  atualizar,
-  atualizarParcial,
-  deleteById,
-};
-
   return casos.find((caso) => caso.id === id);
 }
 
