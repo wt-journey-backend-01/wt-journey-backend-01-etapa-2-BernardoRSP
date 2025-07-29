@@ -3,7 +3,7 @@
 const casos = [
   {
     // CORREÇÃO: UUID v4 real e estático.
-    id: "b57c06a0-11f2-4ba0-9a67-69d8a89c0e23",
+    id: "b57c06a0-11f2-4ba0-9a67-69d8a89a0e23",
     titulo: "homicidio",
     descricao: "Disparos foram reportados às 22:33 do dia 10/07/2007 na região do bairro União, resultando na morte da vítima, um homem de 45 anos.",
     status: "aberto",
