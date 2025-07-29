@@ -1,7 +1,11 @@
 const agentesRepository = require("../repositories/agentesRepository.js");
 const { v4: uuidv4, validate: isUUID } = require("uuid");
 
-// --- FUNÇÕES DE BÔNUS (Mantidas) ---
+function getAllAgentes(req, res) {
+  const agentes = agentesRepository.findAll();
+  res.status(200).json(agentes);
+}
+
 function getAgentesFiltrados(req, res) {
   const { cargo, ordenarPorData } = req.query;
   let agentes = agentesRepository.findAll();
@@ -17,8 +21,8 @@ function getAgentesFiltrados(req, res) {
 
   if (ordenarPorData) {
     agentes.sort((a, b) => {
-      const dataA = new Date(a.dataDeIncorporacao);
-      const dataB = new Date(b.dataDeIncorporacao);
+      const dataA = new Date(a.dataDeIncorporacao.replace(/\//g, "-"));
+      const dataB = new Date(b.dataDeIncorporacao.replace(/\//g, "-"));
       return ordenarPorData === "asc" ? dataA - dataB : dataB - dataA;
     });
   }
@@ -26,93 +30,94 @@ function getAgentesFiltrados(req, res) {
   res.status(200).json(agentes);
 }
 
-// --- FUNÇÕES OBRIGATÓRIAS ---
-
-function getAllAgentes(req, res) {
-  res.status(200).json(agentesRepository.findAll());
-}
-
 function getAgenteById(req, res) {
   const { id } = req.params;
   if (!isUUID(id)) {
-    return res.status(400).json({ status: 400, mensagem: "O ID deve ser um UUID válido." });
+    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
   }
   const agente = agentesRepository.findById(id);
   if (!agente) {
-    return res.status(404).json({ status: 404, mensagem: "Agente não encontrado." });
+    return res.status(404).json({ status: 404, mensagem: "Agente não encontrado" });
   }
   res.status(200).json(agente);
 }
 
 function adicionarAgente(req, res) {
   const { nome, dataDeIncorporacao, cargo } = req.body;
-
-  // CORREÇÃO: Penalidade "Data de incorporação no futuro"
-  const dataRecebida = new Date(dataDeIncorporacao);
-  const dataAtual = new Date();
-  if (dataRecebida > dataAtual) {
-    return res.status(400).json({ status: 400, mensagem: "A data de incorporação não pode ser uma data futura." });
+  const erros = {};
+  if (!nome || !dataDeIncorporacao || !cargo) {
+    erros.geral = "Os campos 'nome', 'dataDeIncorporacao' e 'cargo' são obrigatórios";
   }
-
-  const novoAgente = { id: uuidv4(), nome, dataDeIncorporacao, cargo };
+  if (dataDeIncorporacao && !dataDeIncorporacao.match(/^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/)) {
+    erros.dataDeIncorporacao = "A data de incorporação deve ser uma data válida no formato AAAA/MM/DD";
+  }
+  if (Object.keys(erros).length > 0) {
+    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: erros });
+  }
+  const novoAgente = {
+    id: uuidv4(),
+    nome,
+    dataDeIncorporacao,
+    cargo,
+  };
   agentesRepository.adicionar(novoAgente);
   res.status(201).json(novoAgente);
 }
 
 function atualizarAgente(req, res) {
   const { id } = req.params;
-  // CORREÇÃO: A verificação de existência do agente (404) deve vir primeiro.
-  if (!agentesRepository.findById(id)) {
-    return res.status(404).json({ status: 404, mensagem: "Agente não encontrado." });
-  }
-
   const { nome, dataDeIncorporacao, cargo } = req.body;
-
-  // Validação de data futura
-  const dataRecebida = new Date(dataDeIncorporacao);
-  const dataAtual = new Date();
-  if (dataRecebida > dataAtual) {
-    return res.status(400).json({ status: 400, mensagem: "A data de incorporação não pode ser uma data futura." });
+  if (!isUUID(id)) {
+    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
   }
-
-  // CORREÇÃO: Penalidade "Consegue alterar ID do agente com método PUT"
-  // Criamos um novo objeto para garantir que o ID da URL seja usado, ignorando qualquer ID do corpo.
-  const dadosAtualizados = { id, nome, dataDeIncorporacao, cargo };
-
-  const agenteAtualizado = agentesRepository.atualizar(dadosAtualizados, id);
+  const erros = {};
+  if (!nome || !dataDeIncorporacao || !cargo) {
+    erros.geral = "Todos os campos são obrigatórios para atualização completa (PUT)";
+  }
+  if (dataDeIncorporacao && !dataDeIncorporacao.match(/^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/)) {
+    erros.dataDeIncorporacao = "A data de incorporação deve ser uma data válida no formato AAAA/MM/DD";
+  }
+  if (Object.keys(erros).length > 0) {
+    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: erros });
+  }
+  const agenteAtualizado = agentesRepository.atualizar({ id, nome, dataDeIncorporacao, cargo }, id);
+  if (!agenteAtualizado) {
+    return res.status(404).json({ status: 404, mensagem: "Agente não encontrado" });
+  }
   res.status(200).json(agenteAtualizado);
 }
 
 function atualizarAgenteParcial(req, res) {
   const { id } = req.params;
-  // CORREÇÃO: A verificação de existência (404) deve vir primeiro.
-  if (!agentesRepository.findById(id)) {
-    return res.status(404).json({ status: 404, mensagem: "Agente não encontrado." });
-  }
-
   const novosDados = req.body;
-
-  // CORREÇÃO: Erro "payload em formato incorreto" e "data futura"
-  if (novosDados.dataDeIncorporacao) {
-    const dataRecebida = new Date(novosDados.dataDeIncorporacao);
-    const dataAtual = new Date();
-    if (dataRecebida > dataAtual) {
-      return res.status(400).json({ status: 400, mensagem: "A data de incorporação não pode ser uma data futura." });
-    }
+  if (!isUUID(id)) {
+    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
   }
-  // Impede a alteração do ID via PATCH
+  const erros = {};
   if (novosDados.id) {
-    return res.status(400).json({ status: 400, mensagem: "Não é permitido alterar o ID de um agente." });
+    erros.id = "Não é permitido alterar o ID de um agente.";
   }
-
+  if (novosDados.dataDeIncorporacao && !novosDados.dataDeIncorporacao.match(/^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/)) {
+    erros.dataDeIncorporacao = "A data de incorporação deve ser uma data válida no formato AAAA/MM/DD";
+  }
+  if (Object.keys(erros).length > 0) {
+    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: erros });
+  }
   const agenteAtualizado = agentesRepository.atualizarParcial(novosDados, id);
+  if (!agenteAtualizado) {
+    return res.status(404).json({ status: 404, mensagem: "Agente não encontrado" });
+  }
   res.status(200).json(agenteAtualizado);
 }
 
 function deleteAgenteById(req, res) {
   const { id } = req.params;
-  if (!agentesRepository.deleteById(id)) {
-    return res.status(404).json({ status: 404, mensagem: "Agente não encontrado." });
+  if (!isUUID(id)) {
+    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
+  }
+  const sucesso = agentesRepository.deleteById(id);
+  if (!sucesso) {
+    return res.status(404).json({ status: 404, mensagem: "Agente não encontrado" });
   }
   res.status(204).send();
 }
@@ -122,7 +127,7 @@ module.exports = {
   getAgentesFiltrados,
   getAgenteById,
   adicionarAgente,
+  deleteAgenteById,
   atualizarAgente,
   atualizarAgenteParcial,
-  deleteAgenteById,
 };
