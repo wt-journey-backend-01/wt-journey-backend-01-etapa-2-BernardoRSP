@@ -1,12 +1,14 @@
+// Este middleware captura erros que ocorrem na aplicação.
 function errorHandler(err, req, res, next) {
-  console.error("Erro capturado pelo errorHandler:", err);
+  console.error(err.stack); // Loga o erro no console para debug
 
+  // Se o erro já tiver um status, usa ele. Senão, assume erro 500.
   const statusCode = err.statusCode || 500;
-  const mensagem = err.message || "Erro interno do servidor";
+  const message = err.message || "Ocorreu um erro interno no servidor.";
 
   res.status(statusCode).json({
     status: statusCode,
-    mensagem,
+    mensagem: message,
   });
 }
 
