@@ -48,7 +48,7 @@ function adicionarAgente(req, res) {
   if (!nome || !dataDeIncorporacao || !cargo) {
     erros.geral = "Os campos 'nome', 'dataDeIncorporacao' e 'cargo' são obrigatórios";
   }
-  if (dataDeIncorporacao && !dataDeIncorporacao.match(/^\d{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$/)) {
+  if (dataDeIncorporacao && !dataDeIncorporacao.match(/^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/)) {
     erros.dataDeIncorporacao = "A data de incorporação deve ser uma data válida no formato AAAA/MM/DD";
   }
   if (Object.keys(erros).length > 0) {
@@ -115,7 +115,6 @@ function deleteAgenteById(req, res) {
   if (!isUUID(id)) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
   }
-  // A lógica aqui já estava correta pois o repositório foi ajustado para retornar true/false.
   const sucesso = agentesRepository.deleteById(id);
   if (!sucesso) {
     return res.status(404).json({ status: 404, mensagem: "Agente não encontrado" });
