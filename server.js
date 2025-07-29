@@ -7,7 +7,6 @@ const casosRoutes = require("./routes/casosRoutes.js");
 const setupSwagger = require("./docs/swagger.js");
 const errorHandler = require("./utils/errorHandler.js");
 
-// Middleware para interpretar JSON - Essencial que venha primeiro
 app.use(express.json());
 
 // Rotas da API
@@ -17,7 +16,6 @@ app.use("/casos", casosRoutes);
 // Configuração do Swagger para documentação
 setupSwagger(app);
 
-// Middleware de tratamento de erros - Essencial que venha por último
 app.use(errorHandler);
 
 // Inicia o servidor
