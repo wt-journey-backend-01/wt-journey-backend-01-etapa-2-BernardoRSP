@@ -2,9 +2,9 @@
 
 # 🧪 Relatório de Avaliação – Journey Levty Etapa 1 - BernardoRSP
 
-**Data:** 29/07/2025 00:35
+**Data:** 29/07/2025 01:42
 
-**Nota Final:** `28.53/100`
+**Nota Final:** `30.78/100`
 **Status:** ❌ Reprovado
 
 ---
@@ -48,7 +48,9 @@
     - **Melhoria sugerida**: Ao tentar atualizar um caso inexistente com `PATCH /casos/:id`, o teste não recebeu `404 Not Found`. Certifique-se de que sua rota verifica a existência do recurso antes de tentar a atualização.
 
 ## ⭐ Itens de Destaque (recupera até 40 pontos)
-- Nenhum item bônus foi identificado. Tente adicionar mais estilo e complexidade ao seu código nas próximas tentativas!
+- Você conquistou `1` bônus! Excelente trabalho nos detalhes adicionais!
+  - 🌟 **Testes bônus passados**: `Simple Filtering: Estudante implementou endpoint de filtragem de casos por keywords no título e/ou descrição`
+    - Excelente! Você implementou a busca por palavras-chave (`GET /casos?q=...`) no título e/ou descrição dos casos. Essa funcionalidade de busca livre é um grande diferencial para a usabilidade da API.
 
 ## ❌ Problemas Detectados (Descontos de até 100 pontos)
 - Foram encontrados `2` problemas que acarretam descontos. Veja abaixo os testes penalizados:
