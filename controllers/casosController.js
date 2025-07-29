@@ -72,6 +72,11 @@ function getCasoById(req, res) {
 
 function adicionarCaso(req, res) {
   const { titulo, descricao, status, agente_id } = req.body;
+  // Se o agente não existir, retorna 404
+  const agenteDoCaso = agentesRepository.findById(agente_id);
+  if (!agenteDoCaso || Object.keys(agenteDoCaso).length === 0) {
+    return res.status(404).json({ status: 404, mensagem: "O agente com o ID fornecido não foi encontrado" });
+  }
   const erros = {};
   if (!titulo || !descricao || !status || !agente_id) {
     erros.geral = "Os campos 'titulo', 'descricao', 'status' e 'agente_id' são obrigatórios";
@@ -85,11 +90,7 @@ function adicionarCaso(req, res) {
   if (Object.keys(erros).length > 0) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: erros });
   }
-  // Se o agente não existir, retorna 404
-  const agenteDoCaso = agentesRepository.findById(agente_id);
-  if (!agenteDoCaso || Object.keys(agenteDoCaso).length === 0) {
-    return res.status(404).json({ status: 404, mensagem: "O agente com o ID fornecido não foi encontrado" });
-  }
+
   const novoCaso = {
     id: uuidv4(),
     titulo,
