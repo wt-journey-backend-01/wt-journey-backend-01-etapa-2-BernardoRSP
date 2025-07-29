@@ -126,7 +126,7 @@ function atualizarCaso(req, res) {
   if (Object.keys(erros).length > 0) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: erros });
   }
-  const casoAtualizado = casosRepository.atualizar({ id, titulo, descricao, status, agente_id }, id);
+  const casoAtualizado = casosRepository.atualizar({ titulo, descricao, status, agente_id }, id);
   if (!casoAtualizado) {
     return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
   }

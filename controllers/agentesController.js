@@ -36,7 +36,7 @@ function getAgenteById(req, res) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
   }
   const agente = agentesRepository.findById(id);
-  if (!agente || Object.keys(agente).length === 0) {
+  if (!agente) {
     return res.status(404).json({ status: 404, mensagem: "Agente não encontrado" });
   }
 
