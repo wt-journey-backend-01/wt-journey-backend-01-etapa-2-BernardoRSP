@@ -64,7 +64,7 @@ function getCasoById(req, res) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
   }
   const caso = casosRepository.findById(id);
-  if (!caso) {
+  if (!caso || Object.keys(caso).length === 0) {
     return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
   }
   res.status(200).json(caso);
@@ -86,7 +86,8 @@ function adicionarCaso(req, res) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: erros });
   }
   // Se o agente não existir, retorna 404
-  if (!agentesRepository.findById(agente_id)) {
+  const agenteDoCaso = agentesRepository.findById(agente_id);
+  if (!agenteDoCaso || Object.keys(agenteDoCaso).length === 0) {
     return res.status(404).json({ status: 404, mensagem: "O agente com o ID fornecido não foi encontrado" });
   }
   const novoCaso = {
@@ -134,30 +135,21 @@ function atualizarCaso(req, res) {
 
 function atualizarCasoParcial(req, res) {
   const { id } = req.params;
-  const novosDados = req.body;
-  if (!isUUID(id)) {
-    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
-  }
-  const erros = {};
-  if (novosDados.id) {
-    erros.id = "Não é permitido alterar o ID de um caso.";
-  }
-  if (novosDados.status && novosDados.status !== "aberto" && novosDados.status !== "fechado") {
-    erros.status = "O Status deve ser 'aberto' ou 'fechado'";
-  }
-  if (novosDados.agente_id && !isUUID(novosDados.agente_id)) {
-    erros.agente_id = "O agente_id deve ser um UUID válido";
-  } else if (novosDados.agente_id && !agentesRepository.findById(novosDados.agente_id)) {
-    erros.agente_id = "O agente com o ID fornecido não foi encontrado";
-  }
-  if (Object.keys(erros).length > 0) {
-    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: erros });
-  }
-  const casoAtualizado = casosRepository.atualizarParcial(novosDados, id);
-  if (!casoAtualizado) {
-    return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
-  }
-  res.status(200).json(casoAtualizado);
+  const dados = req.body;
+
+  const casoExistente = casosRepository.findById(id);
+  if (!casoExistente) return res.status(404).json({ mensagem: "Caso não encontrado" });
+
+  // Filtra apenas os campos válidos com base no objeto original
+  const dadosValidos = Object.keys(dados).reduce((obj, chave) => {
+    if (casoExistente.hasOwnProperty(chave)) {
+      obj[chave] = dados[chave];
+    }
+    return obj;
+  }, {});
+
+  const casoAtualizado = casosRepository.atualizarParcial(dadosValidos, id);
+  res.json(casoAtualizado);
 }
 
 function deleteCasoById(req, res) {

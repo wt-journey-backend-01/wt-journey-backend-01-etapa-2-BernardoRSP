@@ -23,12 +23,11 @@ function atualizar(caso, id) {
 }
 
 function atualizarParcial(caso, id) {
-  const indice = casos.findIndex((c) => c.id === id);
-  if (indice !== -1) {
-    casos[indice] = { ...casos[indice], ...caso };
-    return casos[indice];
-  }
-  return null;
+  const index = casos.findIndex((c) => c.id === id);
+  if (index === -1) return null;
+
+  casos[index] = { ...casos[index], ...caso };
+  return casos[index];
 }
 
 function deleteById(id) {
