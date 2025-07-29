@@ -36,9 +36,10 @@ function getAgenteById(req, res) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
   }
   const agente = agentesRepository.findById(id);
-  if (!agente) {
+  if (!agente || Object.keys(agente).length === 0) {
     return res.status(404).json({ status: 404, mensagem: "Agente não encontrado" });
   }
+
   res.status(200).json(agente);
 }
 
@@ -127,6 +128,25 @@ function atualizarAgenteParcial(req, res) {
     } else if (new Date(novosDados.dataDeIncorporacao) > new Date()) {
       erros.dataDeIncorporacao = "A data de incorporação não pode ser no futuro";
     }
+  }
+
+  if (Object.keys(novosDados).length === 0) {
+    return res.status(400).json({
+      status: 400,
+      mensagem: "É necessário fornecer pelo menos um campo para atualização.",
+    });
+  }
+
+  // Validar somente campos válidos:
+  const camposValidos = ["nome", "dataDeIncorporacao", "cargo"];
+  const camposInvalidos = Object.keys(novosDados).filter((campo) => !camposValidos.includes(campo));
+
+  if (camposInvalidos.length > 0) {
+    return res.status(400).json({
+      status: 400,
+      mensagem: "Parâmetros inválidos",
+      errors: { camposInvalidos: `Campos não reconhecidos: ${camposInvalidos.join(", ")}` },
+    });
   }
 
   if (Object.keys(erros).length > 0) {
