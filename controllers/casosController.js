@@ -81,11 +81,13 @@ function adicionarCaso(req, res) {
   }
   if (agente_id && !isUUID(agente_id)) {
     erros.agente_id = "O agente_id deve ser um UUID válido";
-  } else if (agente_id && !agentesRepository.findById(agente_id)) {
-    erros.agente_id = "O agente com o ID fornecido não foi encontrado";
   }
   if (Object.keys(erros).length > 0) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: erros });
+  }
+  // Se o agente não existir, retorna 404
+  if (!agentesRepository.findById(agente_id)) {
+    return res.status(404).json({ status: 404, mensagem: "O agente com o ID fornecido não foi encontrado" });
   }
   const novoCaso = {
     id: uuidv4(),
