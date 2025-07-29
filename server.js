@@ -2,8 +2,8 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
-const agentesRoutes = require("./routes/agentes.routes.js");
-const casosRoutes = require("./routes/casos.routes.js");
+const agentesRoutes = require("./routes/agentesRoutes.js");
+const casosRoutes = require("./routes/casosRoutes.js");
 const setupSwagger = require("./docs/swagger.js");
 const errorHandler = require("./utils/errorHandler.js");
 
