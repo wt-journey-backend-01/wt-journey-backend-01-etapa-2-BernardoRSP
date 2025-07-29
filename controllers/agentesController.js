@@ -74,7 +74,7 @@ function atualizarAgente(req, res) {
   if (!nome || !dataDeIncorporacao || !cargo) {
     erros.geral = "Todos os campos são obrigatórios para atualização completa (PUT)";
   }
-  if (dataDeIncorporacao && !dataDeIncorporacao.match(/^\d{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$/)) {
+  if (dataDeIncorporacao && !dataDeIncorporacao.match(/^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/)) {
     erros.dataDeIncorporacao = "A data de incorporação deve ser uma data válida no formato AAAA/MM/DD";
   }
   if (Object.keys(erros).length > 0) {
@@ -97,7 +97,7 @@ function atualizarAgenteParcial(req, res) {
   if (novosDados.id) {
     erros.id = "Não é permitido alterar o ID de um agente.";
   }
-  if (novosDados.dataDeIncorporacao && !novosDados.dataDeIncorporacao.match(/^\d{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])$/)) {
+  if (novosDados.dataDeIncorporacao && !novosDados.dataDeIncorporacao.match(/^\d{4}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/)) {
     erros.dataDeIncorporacao = "A data de incorporação deve ser uma data válida no formato AAAA/MM/DD";
   }
   if (Object.keys(erros).length > 0) {
