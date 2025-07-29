@@ -102,11 +102,15 @@ function adicionarCaso(req, res) {
 
 function atualizarCaso(req, res) {
   const { id } = req.params;
-  const { titulo, descricao, status, agente_id } = req.body;
+  const { titulo, descricao, status, agente_id, id: bodyId } = req.body;
   if (!isUUID(id)) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
   }
   const erros = {};
+
+  if (bodyId) {
+    erros.id = "Não é permitido alterar o ID de um caso.";
+  }
   if (!titulo || !descricao || !status || !agente_id) {
     erros.geral = "Todos os campos são obrigatórios para atualização completa (PUT)";
   }
