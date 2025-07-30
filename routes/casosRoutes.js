@@ -20,7 +20,29 @@ const casosController = require("../controllers/casosController.js");
  *         description: Lista de casos retornada com sucesso
  */
 router.get("/", casosController.getAllCasos);
-
+// Extras
+/**
+ * @swagger
+ * /casos/search:
+ *   get:
+ *     summary: Filtra casos por status ou agente
+ *     tags: [Casos]
+ *     parameters:
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *         description: Status do caso
+ *       - in: query
+ *         name: agente_id
+ *         schema:
+ *           type: string
+ *         description: ID do agente
+ *     responses:
+ *       200:
+ *         description: Casos filtrados retornados
+ */
+router.get("/search", casosController.getCasosFiltrados);
 /**
  * @swagger
  * /casos/{id}:
@@ -135,30 +157,6 @@ router.patch("/:id", casosController.atualizarCasoParcial);
  */
 
 router.delete("/:id", casosController.deleteCasoById);
-
-// Extras
-/**
- * @swagger
- * /casos/search:
- *   get:
- *     summary: Filtra casos por status ou agente
- *     tags: [Casos]
- *     parameters:
- *       - in: query
- *         name: status
- *         schema:
- *           type: string
- *         description: Status do caso
- *       - in: query
- *         name: agente_id
- *         schema:
- *           type: string
- *         description: ID do agente
- *     responses:
- *       200:
- *         description: Casos filtrados retornados
- */
-router.get("/search", casosController.getCasosFiltrados);
 
 /**
  * @swagger
