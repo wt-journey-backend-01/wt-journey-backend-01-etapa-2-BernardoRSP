@@ -16,7 +16,7 @@ function adicionar(caso) {
 function atualizar(caso, id) {
   const indice = casos.findIndex((c) => c.id === id);
   if (indice !== -1) {
-    casos[indice] = caso;
+    casos[indice] = { id, ...caso };
     return casos[indice];
   }
   return null;
