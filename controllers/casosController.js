@@ -108,6 +108,11 @@ function atualizarCaso(req, res) {
   if (!isUUID(id)) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
   }
+
+  const casoAtualizado = casosRepository.atualizar({ id, titulo, descricao, status, agente_id }, id);
+  if (!casoAtualizado) {
+    return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
+  }
   const erros = {};
 
   if (bodyId) {
@@ -127,10 +132,7 @@ function atualizarCaso(req, res) {
   if (Object.keys(erros).length > 0) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: erros });
   }
-  const casoAtualizado = casosRepository.atualizar({ id, titulo, descricao, status, agente_id }, id);
-  if (!casoAtualizado) {
-    return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
-  }
+
   res.status(200).json(casoAtualizado);
 }
 
