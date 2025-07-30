@@ -102,7 +102,7 @@ function adicionarCaso(req, res) {
   res.status(201).json(novoCaso);
 }
 
-function atualizarCaso(req, res) {
+/*function atualizarCaso(req, res) {
   const { id } = req.params;
   const { titulo, descricao, status, agente_id, id: bodyId } = req.body;
   if (!isUUID(id)) {
@@ -134,6 +134,25 @@ function atualizarCaso(req, res) {
   }
 
   res.status(200).json(casoAtualizado);
+}*/
+
+function atualizarCaso(req, res) {
+  const { id } = req.params;
+  const dados = req.body;
+
+  const casoExistente = casosRepository.findById(id);
+  if (!casoExistente) return res.status(404).json({ mensagem: "Caso não encontrado" });
+
+  // Filtra apenas os campos válidos com base no objeto original
+  const dadosValidos = Object.keys(dados).reduce((obj, chave) => {
+    if (casoExistente.hasOwnProperty(chave)) {
+      obj[chave] = dados[chave];
+    }
+    return obj;
+  }, {});
+
+  const casoAtualizado = casosRepository.atualizar(dadosValidos, id);
+  res.json(casoAtualizado);
 }
 
 function atualizarCasoParcial(req, res) {
