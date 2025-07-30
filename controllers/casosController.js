@@ -143,6 +143,8 @@ function atualizarCaso(req, res) {
   const casoExistente = casosRepository.findById(id);
   if (!casoExistente) return res.status(404).json({ mensagem: "Caso não encontrado" });
 
+  delete dados.id;
+
   // Filtra apenas os campos válidos com base no objeto original
   const dadosValidos = Object.keys(dados).reduce((obj, chave) => {
     if (casoExistente.hasOwnProperty(chave)) {
