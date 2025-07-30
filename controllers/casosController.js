@@ -136,7 +136,7 @@ function adicionarCaso(req, res) {
   res.status(200).json(casoAtualizado);
 }*/
 
-/*function atualizarCaso(req, res) {
+function atualizarCaso(req, res) {
   const { id } = req.params;
   const dados = req.body;
 
@@ -155,56 +155,6 @@ function adicionarCaso(req, res) {
 
   const casoAtualizado = casosRepository.atualizar(dadosValidos, id);
   res.json(casoAtualizado);
-}*/
-
-function atualizarCaso(req, res) {
-  const { id } = req.params;
-  const { titulo, descricao, status, agente_id, id: bodyId } = req.body;
-
-  if (!isUUID(id)) {
-    return res.status(400).json({
-      status: 400,
-      mensagem: "Parâmetros inválidos",
-      errors: { id: "O ID na URL deve ser um UUID válido" },
-    });
-  }
-
-  const casoExistente = casosRepository.findById(id);
-  if (!casoExistente) {
-    return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
-  }
-
-  const erros = {};
-
-  if (bodyId) {
-    erros.id = "Não é permitido alterar o ID de um caso.";
-  }
-
-  if (!titulo || !descricao || !status || !agente_id) {
-    erros.geral = "Todos os campos são obrigatórios para atualização completa (PUT)";
-  }
-
-  if (status !== "aberto" && status !== "fechado") {
-    erros.status = "O status deve ser 'aberto' ou 'fechado'";
-  }
-
-  if (!isUUID(agente_id)) {
-    erros.agente_id = "O agente_id deve ser um UUID válido";
-  } else if (!agentesRepository.findById(agente_id)) {
-    erros.agente_id = "O agente com o ID fornecido não foi encontrado";
-  }
-
-  if (Object.keys(erros).length > 0) {
-    return res.status(400).json({
-      status: 400,
-      mensagem: "Parâmetros inválidos",
-      errors: erros,
-    });
-  }
-
-  const dadosAtualizados = { titulo, descricao, status, agente_id };
-  const casoAtualizado = casosRepository.atualizar(dadosAtualizados, id);
-  res.status(200).json(casoAtualizado);
 }
 
 function atualizarCasoParcial(req, res) {
