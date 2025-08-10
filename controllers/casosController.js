@@ -2,14 +2,14 @@ const casosRepository = require("../repositories/casosRepository.js");
 const agentesRepository = require("../repositories/agentesRepository.js");
 const { v4: uuidv4, validate: isUUID } = require("uuid");
 
-function getAllCasos(req, res) {
-  const casos = casosRepository.findAll();
+function listarCasos(req, res) {
+  const casos = casosRepository.listar();
   res.status(200).json(casos);
 }
 
 function getCasosFiltrados(req, res) {
   let { status, agente_id, q, ordenarPor } = req.query;
-  let casos = casosRepository.findAll();
+  let casos = casosRepository.listar();
 
   if (status && status !== "aberto" && status !== "fechado") {
     return res.status(400).json({ status: 400, mensagem: "Parâmetro 'status' inválido. Use 'aberto' ou 'fechado'." });
@@ -47,23 +47,23 @@ function getAgenteDoCaso(req, res) {
   if (!isUUID(id)) {
     return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID do caso deve ser um UUID válido" } });
   }
-  const caso = casosRepository.findById(id);
+  const caso = casosRepository.encontrar(id);
   if (!caso) {
     return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
   }
-  const agente = agentesRepository.findById(caso.agente_id);
+  const agente = agentesRepository.encontrar(caso.agente_id);
   if (!agente) {
     return res.status(404).json({ status: 404, mensagem: "Agente associado ao caso não encontrado" });
   }
   res.status(200).json(agente);
 }
 
-function getCasoById(req, res) {
+function encontrarCaso(req, res) {
   const { id } = req.params;
   if (!isUUID(id)) {
     return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
   }
-  const caso = casosRepository.findById(id);
+  const caso = casosRepository.encontrar(id);
   if (!caso || Object.keys(caso).length === 0) {
     return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
   }
@@ -73,7 +73,7 @@ function getCasoById(req, res) {
 function adicionarCaso(req, res) {
   const { titulo, descricao, status, agente_id } = req.body;
   // Se o agente não existir, retorna 404
-  const agenteDoCaso = agentesRepository.findById(agente_id);
+  const agenteDoCaso = agentesRepository.encontrar(agente_id);
   if (!agenteDoCaso || Object.keys(agenteDoCaso).length === 0) {
     return res.status(404).json({ status: 404, mensagem: "O agente com o ID fornecido não foi encontrado" });
   }
@@ -126,7 +126,7 @@ function adicionarCaso(req, res) {
   }
   if (agente_id && !isUUID(agente_id)) {
     erros.agente_id = "O agente_id deve ser um UUID válido";
-  } else if (agente_id && !agentesRepository.findById(agente_id)) {
+  } else if (agente_id && !agentesRepository.encontrar(agente_id)) {
     erros.agente_id = "O agente com o ID fornecido não foi encontrado";
   }
   if (Object.keys(erros).length > 0) {
@@ -140,7 +140,7 @@ function atualizarCaso(req, res) {
   const { id } = req.params;
   const dados = req.body;
 
-  const casoExistente = casosRepository.findById(id);
+  const casoExistente = casosRepository.encontrar(id);
   if (!casoExistente) return res.status(404).json({ mensagem: "Caso não encontrado" });
 
   delete dados.id;
@@ -161,7 +161,7 @@ function atualizarCasoParcial(req, res) {
   const { id } = req.params;
   const dados = req.body;
 
-  const casoExistente = casosRepository.findById(id);
+  const casoExistente = casosRepository.encontrar(id);
   if (!casoExistente) return res.status(404).json({ mensagem: "Caso não encontrado" });
 
   // Filtra apenas os campos válidos com base no objeto original
@@ -176,12 +176,12 @@ function atualizarCasoParcial(req, res) {
   res.json(casoAtualizado);
 }
 
-function deleteCasoById(req, res) {
+function deletarCaso(req, res) {
   const { id } = req.params;
   if (!isUUID(id)) {
     return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
   }
-  const sucesso = casosRepository.deleteById(id);
+  const sucesso = casosRepository.deletar(id);
   if (!sucesso) {
     return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
   }
@@ -189,12 +189,12 @@ function deleteCasoById(req, res) {
 }
 
 module.exports = {
-  getAllCasos,
-  getCasosFiltrados,
-  getCasoById,
+  listarCasos,
+  encontrarCaso,
   adicionarCaso,
-  deleteCasoById,
   atualizarCaso,
   atualizarCasoParcial,
+  deletarCaso,
   getAgenteDoCaso,
+  getCasosFiltrados,
 };

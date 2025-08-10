@@ -51,7 +51,7 @@ module.exports = {
   listar,
   encontrar,
   adicionar,
-  deletar,
   atualizar,
   atualizarParcial,
+  deletar,
 };

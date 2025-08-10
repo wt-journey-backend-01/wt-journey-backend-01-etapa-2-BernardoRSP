@@ -19,7 +19,7 @@ const agentesController = require("../controllers/agentesController.js");
  *       200:
  *         description: Lista de agentes retornada com sucesso
  */
-router.get("/", agentesController.getAllAgentes);
+router.get("/", agentesController.listarAgentes);
 
 /**
  * @swagger
@@ -40,7 +40,7 @@ router.get("/", agentesController.getAllAgentes);
  *       404:
  *         description: Agente não encontrado
  */
-router.get("/:id", agentesController.getAgenteById);
+router.get("/:id", agentesController.encontrarAgente);
 
 /**
  * @swagger
@@ -136,7 +136,7 @@ router.patch("/:id", agentesController.atualizarAgenteParcial);
  *       404:
  *         description: Agente não encontrado
  */
-router.delete("/:id", agentesController.deleteAgenteById);
+router.delete("/:id", agentesController.deletarAgente);
 
 // Extras
 router.get("/filtro", agentesController.getAgentesFiltrados);

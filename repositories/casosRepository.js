@@ -8,11 +8,11 @@ const casos = [
   },
 ];
 
-function findAll() {
+function listar() {
   return casos;
 }
 
-function findById(id) {
+function encontrar(id) {
   return casos.find((caso) => caso.id === id);
 }
 
@@ -38,7 +38,7 @@ function atualizarParcial(caso, id) {
   return casos[index];
 }
 
-function deleteById(id) {
+function deletar(id) {
   const indice = casos.findIndex((c) => c.id === id);
   if (indice !== -1) {
     casos.splice(indice, 1);
@@ -48,10 +48,10 @@ function deleteById(id) {
 }
 
 module.exports = {
-  findAll,
-  findById,
+  listar,
+  encontrar,
   adicionar,
   atualizar,
   atualizarParcial,
-  deleteById,
+  deletar,
 };

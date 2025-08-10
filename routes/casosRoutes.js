@@ -19,7 +19,7 @@ const casosController = require("../controllers/casosController.js");
  *       200:
  *         description: Lista de casos retornada com sucesso
  */
-router.get("/", casosController.getAllCasos);
+router.get("/", casosController.listarCasos);
 // Extras
 /**
  * @swagger
@@ -62,7 +62,7 @@ router.get("/search", casosController.getCasosFiltrados);
  *       404:
  *         description: Caso não encontrado
  */
-router.get("/:id", casosController.getCasoById);
+router.get("/:id", casosController.encontrarCaso);
 /**
  * @swagger
  * /casos:
@@ -156,7 +156,7 @@ router.patch("/:id", casosController.atualizarCasoParcial);
  *         description: Caso não encontrado
  */
 
-router.delete("/:id", casosController.deleteCasoById);
+router.delete("/:id", casosController.deletarCaso);
 
 /**
  * @swagger
