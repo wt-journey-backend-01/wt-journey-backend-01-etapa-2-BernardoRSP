@@ -102,7 +102,7 @@ function adicionarCaso(req, res) {
   res.status(201).json(novoCaso);
 }
 
-/*function atualizarCaso(req, res) {
+function atualizarCaso(req, res) {
   const { id } = req.params;
   const { titulo, descricao, status, agente_id, id: bodyId } = req.body;
   if (!isUUID(id)) {
@@ -134,9 +134,9 @@ function adicionarCaso(req, res) {
   }
 
   res.status(200).json(casoAtualizado);
-}*/
+}
 
-function atualizarCaso(req, res) {
+/*function atualizarCaso(req, res) {
   const { id } = req.params;
   const dados = req.body;
 
@@ -155,7 +155,7 @@ function atualizarCaso(req, res) {
 
   const casoAtualizado = casosRepository.atualizar(dadosValidos, id);
   res.json(casoAtualizado);
-}
+}*/
 
 function atualizarCasoParcial(req, res) {
   const { id } = req.params;
