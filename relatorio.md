@@ -2,24 +2,20 @@
 
 # 🧪 Relatório de Avaliação – Journey Levty Etapa 1 - BernardoRSP
 
-**Data:** 10/08/2025 23:51
+**Data:** 10/08/2025 23:54
 
-**Nota Final:** `95.09/100`
+**Nota Final:** `100.00/100`
 **Status:** ✅ Aprovado
 
 ---
 ## ✅ Requisitos Obrigatórios
-- Foram encontrados `1` problemas nos requisitos obrigatórios. Veja abaixo os testes que falharam:
-  - ⚠️ **Falhou no teste**: `UPDATE: Recebe status code 400 ao tentar atualizar um caso por completo com método PUT com payload em formato incorreto`
-    - **Melhoria sugerida**: Sua rota de atualização completa de casos (`PUT /casos/:id`) não está retornando `400 Bad Request` para payloads inválidos. Garanta que a validação de dados ocorra antes da tentativa de atualização.
+- Todos os requisitos básicos foram atendidos. Excelente trabalho!
 
 ## ⭐ Itens de Destaque (recupera até 40 pontos)
 - Nenhum item bônus foi identificado. Tente adicionar mais estilo e complexidade ao seu código nas próximas tentativas!
 
 ## ❌ Problemas Detectados (Descontos de até 100 pontos)
-- Foram encontrados `1` problemas que acarretam descontos. Veja abaixo os testes penalizados:
-  - ⚠️ **Falhou no teste de penalidade**: `Validation: Consegue alterar ID do caso com método PUT`
-    - **Correção sugerida**: Nenhuma sugestão de correção disponível.
+- Nenhuma infração grave foi detectada. Muito bom nesse aspecto!
 
 ---
 Continue praticando e caprichando no código. Cada detalhe conta! 💪
