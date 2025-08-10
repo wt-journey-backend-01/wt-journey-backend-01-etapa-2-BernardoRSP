@@ -45,7 +45,7 @@ function getAgenteDoCaso(req, res) {
   const { id } = req.params;
 
   if (!isUUID(id)) {
-    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID do caso deve ser um UUID válido" } });
+    return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID do caso deve ser um UUID válido" } });
   }
   const caso = casosRepository.findById(id);
   if (!caso) {
@@ -61,7 +61,7 @@ function getAgenteDoCaso(req, res) {
 function getCasoById(req, res) {
   const { id } = req.params;
   if (!isUUID(id)) {
-    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
+    return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
   }
   const caso = casosRepository.findById(id);
   if (!caso || Object.keys(caso).length === 0) {
@@ -106,7 +106,7 @@ function adicionarCaso(req, res) {
   const { id } = req.params;
   const { titulo, descricao, status, agente_id, id: bodyId } = req.body;
   if (!isUUID(id)) {
-    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
+    return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
   }
 
   const casoAtualizado = casosRepository.atualizar({ id, titulo, descricao, status, agente_id }, id);
@@ -179,7 +179,7 @@ function atualizarCasoParcial(req, res) {
 function deleteCasoById(req, res) {
   const { id } = req.params;
   if (!isUUID(id)) {
-    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
+    return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
   }
   const sucesso = casosRepository.deleteById(id);
   if (!sucesso) {

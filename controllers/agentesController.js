@@ -1,14 +1,14 @@
 const agentesRepository = require("../repositories/agentesRepository.js");
 const { v4: uuidv4, validate: isUUID } = require("uuid");
 
-function getAllAgentes(req, res) {
-  const agentes = agentesRepository.findAll();
+function listarAgentes(req, res) {
+  const agentes = agentesRepository.listar();
   res.status(200).json(agentes);
 }
 
 function getAgentesFiltrados(req, res) {
   const { cargo, ordenarPorData } = req.query;
-  let agentes = agentesRepository.findAll();
+  let agentes = agentesRepository.listar();
 
   if (ordenarPorData && ordenarPorData !== "asc" && ordenarPorData !== "desc") {
     return res.status(400).json({ status: 400, mensagem: "Parâmetro 'ordenarPorData' inválido. Use 'asc' ou 'desc'." });
@@ -30,12 +30,12 @@ function getAgentesFiltrados(req, res) {
   res.status(200).json(agentes);
 }
 
-function getAgenteById(req, res) {
+function encontrarAgente(req, res) {
   const { id } = req.params;
   if (!isUUID(id)) {
-    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
+    return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
   }
-  const agente = agentesRepository.findById(id);
+  const agente = agentesRepository.encontrar(id);
   if (!agente) {
     return res.status(404).json({ status: 404, mensagem: "Agente não encontrado" });
   }
@@ -77,7 +77,7 @@ function atualizarAgente(req, res) {
   const { nome, dataDeIncorporacao, cargo, id: bodyId } = req.body;
 
   if (!isUUID(id)) {
-    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
+    return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
   }
 
   const erros = {};
@@ -113,7 +113,7 @@ function atualizarAgenteParcial(req, res) {
   const novosDados = req.body;
 
   if (!isUUID(id)) {
-    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
+    return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
   }
 
   const erros = {};
@@ -161,12 +161,12 @@ function atualizarAgenteParcial(req, res) {
   res.status(200).json(agenteAtualizado);
 }
 
-function deleteAgenteById(req, res) {
+function deletarAgente(req, res) {
   const { id } = req.params;
   if (!isUUID(id)) {
-    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
+    return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID deve ser um UUID válido" } });
   }
-  const sucesso = agentesRepository.deleteById(id);
+  const sucesso = agentesRepository.deletar(id);
   if (!sucesso) {
     return res.status(404).json({ status: 404, mensagem: "Agente não encontrado" });
   }
@@ -174,11 +174,11 @@ function deleteAgenteById(req, res) {
 }
 
 module.exports = {
-  getAllAgentes,
+  listarAgentes,
   getAgentesFiltrados,
-  getAgenteById,
+  encontrarAgente,
   adicionarAgente,
-  deleteAgenteById,
+  deletarAgente,
   atualizarAgente,
   atualizarAgenteParcial,
 };

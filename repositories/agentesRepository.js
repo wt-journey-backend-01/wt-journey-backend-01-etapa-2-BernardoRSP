@@ -7,11 +7,11 @@ const agentes = [
   },
 ];
 
-function findAll() {
+function listar() {
   return agentes;
 }
 
-function findById(id) {
+function encontrar(id) {
   return agentes.find((agente) => agente.id === id);
 }
 
@@ -38,7 +38,7 @@ function atualizarParcial(agente, id) {
   return null;
 }
 
-function deleteById(id) {
+function deletar(id) {
   const indice = agentes.findIndex((a) => a.id === id);
   if (indice !== -1) {
     agentes.splice(indice, 1);
@@ -48,10 +48,10 @@ function deleteById(id) {
 }
 
 module.exports = {
-  findAll,
-  findById,
+  listar,
+  encontrar,
   adicionar,
-  deleteById,
+  deletar,
   atualizar,
   atualizarParcial,
 };
