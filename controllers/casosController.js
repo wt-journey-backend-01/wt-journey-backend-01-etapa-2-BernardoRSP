@@ -114,9 +114,14 @@ function atualizarCaso(req, res) {
     return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
   }
   const erros = {};
+  const camposPermitidos = ["titulo", "descricao", "status", "agente_id"];
+  const campos = Object.keys(req.body);
 
   if (bodyId) {
     erros.id = "Não é permitido alterar o ID de um caso.";
+  }
+  if (campos.some((campo) => !camposPermitidos.includes(campo))) {
+    erros.geral = "O caso deve conter apenas os campos 'titulo', 'descricao', 'status' e 'agente_id'";
   }
   if (!titulo || !descricao || !status || !agente_id) {
     erros.geral = "Todos os campos são obrigatórios para atualização completa (PUT)";
