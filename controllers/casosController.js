@@ -104,7 +104,7 @@ function adicionarCaso(req, res) {
 
 function atualizarCaso(req, res) {
   const { id } = req.params;
-  const { titulo, descricao, status, agente_id, id: bodyId } = req.body;
+  const { titulo, descricao, status, agente_id } = req.body;
 
   if (!isUUID(id)) {
     return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
@@ -114,12 +114,12 @@ function atualizarCaso(req, res) {
   const camposPermitidos = ["titulo", "descricao", "status", "agente_id"];
   const campos = Object.keys(req.body);
 
-  if (bodyId) {
-    erros.id = "Não é permitido alterar o ID de um caso.";
+  const camposInvalidos = camposDoBody.filter((campo) => !camposPermitidos.includes(campo) && campo !== "id");
+
+  if (camposInvalidos.length > 0) {
+    erros.geral = `O corpo da requisição contém campos inválidos: ${camposInvalidos.join(", ")}. Permitidos são: 'titulo', 'descricao', 'status', 'agente_id'.`;
   }
-  if (campos.some((campo) => !camposPermitidos.includes(campo))) {
-    erros.geral = "O caso deve conter apenas os campos 'titulo', 'descricao', 'status' e 'agente_id'";
-  }
+
   if (!titulo || !descricao || !status || !agente_id) {
     erros.geral = "Todos os campos são obrigatórios para atualização completa (PUT)";
   }
