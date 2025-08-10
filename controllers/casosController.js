@@ -118,6 +118,27 @@ function atualizarCaso(req, res) {
   const camposPermitidos = ["titulo", "descricao", "status", "agente_id"];
   const campos = Object.keys(req.body);
 
+  if (bodyId) {
+    erros.id = "Não é permitido alterar o ID de um caso.";
+  }
+  if (campos.some((campo) => !camposPermitidos.includes(campo))) {
+    erros.geral = "O caso deve conter apenas os campos 'titulo', 'descricao', 'status' e 'agente_id'";
+  }
+  if (!titulo || !descricao || !status || !agente_id) {
+    erros.geral = "Todos os campos são obrigatórios para atualização completa (PUT)";
+  }
+  if (status && status !== "aberto" && status !== "solucionado") {
+    erros.status = "O Status deve ser 'aberto' ou 'solucionado'";
+  }
+  if (agente_id && !isUUID(agente_id)) {
+    erros.agente_id = "O agente_id deve ser um UUID válido";
+  } else if (agente_id && !agentesRepository.encontrar(agente_id)) {
+    erros.agente_id = "O agente com o ID fornecido não foi encontrado";
+  }
+  if (Object.keys(erros).length > 0) {
+    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: erros });
+  }
+
   const casoAtualizado = casosRepository.atualizar({ titulo, descricao, status, agente_id }, id);
   if (!casoAtualizado) {
     return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
