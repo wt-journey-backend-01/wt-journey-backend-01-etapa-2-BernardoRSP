@@ -72,7 +72,7 @@ function encontrarCaso(req, res) {
 
 function adicionarCaso(req, res) {
   const { titulo, descricao, status, agente_id } = req.body;
-  // Se o agente não existir, retorna 404
+
   const agenteDoCaso = agentesRepository.encontrar(agente_id);
   if (!agenteDoCaso || Object.keys(agenteDoCaso).length === 0) {
     return res.status(404).json({ status: 404, mensagem: "O agente com o ID fornecido não foi encontrado" });
@@ -105,11 +105,12 @@ function adicionarCaso(req, res) {
 function atualizarCaso(req, res) {
   const { id } = req.params;
   const { titulo, descricao, status, agente_id, id: bodyId } = req.body;
+
   if (!isUUID(id)) {
     return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
   }
 
-  const casoAtualizado = casosRepository.atualizar({ id, titulo, descricao, status, agente_id }, id);
+  const casoAtualizado = casosRepository.atualizar({ titulo, descricao, status, agente_id }, id);
   if (!casoAtualizado) {
     return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
   }
