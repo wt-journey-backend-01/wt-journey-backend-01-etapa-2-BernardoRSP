@@ -110,10 +110,6 @@ function atualizarCaso(req, res) {
     return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
   }
 
-  const casoAtualizado = casosRepository.atualizar({ titulo, descricao, status, agente_id }, id);
-  if (!casoAtualizado) {
-    return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
-  }
   const erros = {};
   const camposPermitidos = ["titulo", "descricao", "status", "agente_id"];
   const campos = Object.keys(req.body);
@@ -139,29 +135,13 @@ function atualizarCaso(req, res) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: erros });
   }
 
+  const casoAtualizado = casosRepository.atualizar({ titulo, descricao, status, agente_id }, id);
+  if (!casoAtualizado) {
+    return res.status(404).json({ status: 404, mensagem: "Caso não encontrado" });
+  }
+
   res.status(200).json(casoAtualizado);
 }
-
-/*function atualizarCaso(req, res) {
-  const { id } = req.params;
-  const dados = req.body;
-
-  const casoExistente = casosRepository.encontrar(id);
-  if (!casoExistente) return res.status(404).json({ mensagem: "Caso não encontrado" });
-
-  delete dados.id;
-
-  // Filtra apenas os campos válidos com base no objeto original
-  const dadosValidos = Object.keys(dados).reduce((obj, chave) => {
-    if (casoExistente.hasOwnProperty(chave)) {
-      obj[chave] = dados[chave];
-    }
-    return obj;
-  }, {});
-
-  const casoAtualizado = casosRepository.atualizar(dadosValidos, id);
-  res.json(casoAtualizado);
-}*/
 
 function atualizarCasoParcial(req, res) {
   const { id } = req.params;
