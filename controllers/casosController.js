@@ -150,7 +150,11 @@ function atualizarCaso(req, res) {
 // Atualizar Informações Parciais Caso
 function atualizarCasoParcial(req, res) {
   const { id } = req.params;
-  const dados = req.body;
+  const novosDados = req.body;
+
+  if (!isUUID(id)) {
+    return res.status(404).json({ status: 404, mensagem: "Parâmetros inválidos", errors: { id: "O ID na URL deve ser um UUID válido" } });
+  }
 
   const erros = {};
   const camposPermitidos = ["titulo", "descricao", "status", "agente_id"];
@@ -160,7 +164,7 @@ function atualizarCasoParcial(req, res) {
     erros.geral = "Campos inválidos enviados. Permitidos: 'titulo', 'descricao', 'status', 'agente_id'";
   }
 
-  if (dados.id) {
+  if (novosDados.id) {
     erros.geral = "Não é permitido alterar o ID de um caso";
   }
 
@@ -169,16 +173,18 @@ function atualizarCasoParcial(req, res) {
   }
 
   const casoExistente = casosRepository.encontrar(id);
-  if (!casoExistente) return res.status(404).json({ mensagem: "Caso não encontrado" });
+  if (!casoExistente) {
+    return res.status(404).json({ mensagem: "Caso não encontrado" });
+  }
 
-  const dadosValidos = Object.keys(dados).reduce((obj, chave) => {
+  /*const dadosValidos = Object.keys(novosDados).reduce((obj, chave) => {
     if (casoExistente.hasOwnProperty(chave)) {
-      obj[chave] = dados[chave];
+      obj[chave] = novosDados[chave];
     }
     return obj;
-  }, {});
+  }, {});*/
 
-  const casoAtualizado = casosRepository.atualizarParcial(dadosValidos, id);
+  const casoAtualizado = casosRepository.atualizarParcial(novosDados, id);
   res.json(casoAtualizado);
 }
 
