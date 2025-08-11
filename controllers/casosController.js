@@ -119,7 +119,7 @@ function atualizarCaso(req, res) {
   const campos = Object.keys(req.body);
 
   if (bodyId) {
-    erros.id = "Não é permitido alterar o ID de um caso.";
+    erros.id = "Não é permitido alterar o ID de um caso";
   }
   if (campos.some((campo) => !camposPermitidos.includes(campo))) {
     erros.geral = "O caso deve conter apenas os campos 'titulo', 'descricao', 'status' e 'agente_id'";
@@ -152,15 +152,24 @@ function atualizarCasoParcial(req, res) {
   const { id } = req.params;
   const dados = req.body;
 
+  const erros = {};
+  const camposPermitidos = ["titulo", "descricao", "status", "agente_id"];
+  const campos = Object.keys(req.body);
+
+  if (campos.some((campo) => !camposPermitidos.includes(campo))) {
+    erros.geral = "Campos inválidos enviados. Permitidos: 'titulo', 'descricao', 'status', 'agente_id'";
+  }
+
+  if (dados.id) {
+    erros.geral = "Não é permitido alterar o ID de um caso";
+  }
+
+  if (Object.keys(erros).length > 0) {
+    return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: erros });
+  }
+
   const casoExistente = casosRepository.encontrar(id);
   if (!casoExistente) return res.status(404).json({ mensagem: "Caso não encontrado" });
-
-  const dadosValidos = Object.keys(dados).reduce((obj, chave) => {
-    if (casoExistente.hasOwnProperty(chave)) {
-      obj[chave] = dados[chave];
-    }
-    return obj;
-  }, {});
 
   const casoAtualizado = casosRepository.atualizarParcial(dadosValidos, id);
   res.json(casoAtualizado);
