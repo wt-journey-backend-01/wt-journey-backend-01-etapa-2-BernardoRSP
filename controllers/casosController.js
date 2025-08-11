@@ -171,6 +171,13 @@ function atualizarCasoParcial(req, res) {
   const casoExistente = casosRepository.encontrar(id);
   if (!casoExistente) return res.status(404).json({ mensagem: "Caso não encontrado" });
 
+  const dadosValidos = Object.keys(dados).reduce((obj, chave) => {
+    if (casoExistente.hasOwnProperty(chave)) {
+      obj[chave] = dados[chave];
+    }
+    return obj;
+  }, {});
+
   const casoAtualizado = casosRepository.atualizarParcial(dadosValidos, id);
   res.json(casoAtualizado);
 }
