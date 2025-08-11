@@ -132,9 +132,9 @@ function atualizarCaso(req, res) {
   }
   if (agente_id && !isUUID(agente_id)) {
     erros.agente_id = "O agente_id deve ser um UUID válido";
-  } else if (agente_id && !agentesRepository.encontrar(agente_id)) {
+  } /*else if (agente_id && !agentesRepository.encontrar(agente_id)) {
     erros.agente_id = "O agente com o ID fornecido não foi encontrado";
-  }
+  }*/
   if (Object.keys(erros).length > 0) {
     return res.status(400).json({ status: 400, mensagem: "Parâmetros inválidos", errors: erros });
   }
